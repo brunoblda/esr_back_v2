@@ -16,7 +16,7 @@ from auth_layer.auth_bearer import JWTBearer
 app = FastAPI()
 
 #origins = ["*"]
-origins = ["http://localhost:8080", "https://esr-front.vercel.app:8443", "https://esr-front.vercel.app:443"]
+origins = ["http://localhost:8080", "https://esr-front.vercel.app" ]
 
 app.add_middleware(
   CORSMiddleware,
