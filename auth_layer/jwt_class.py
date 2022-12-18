@@ -11,18 +11,12 @@ import os
 #secret_key = "8DDDAB681A46BDEC5C53C125A7C6D"
 secret_key = os.environ['SECRET_KEY']
 
-timeStarted = datetime.datetime.now()
 
 def create_jwt(payload):
 
-  global timeStarted
   global secret_key
 
-  payload["exp"] = (datetime.datetime.now() + datetime.timedelta(hours=2)).timestamp()
-
-  if (timeStarted + datetime.timedelta(hours=4)).timestamp() < datetime.datetime.now().timestamp():
-    secret_key = os.environ['SECRET_KEY']
-    timeStarted = datetime.datetime.now()
+  payload["exp"] = (datetime.datetime.utcnow() + datetime.timedelta(hours=2)).timestamp()
 
   payload = json.dumps(payload).encode()
   header = json.dumps({
@@ -40,12 +34,7 @@ def create_jwt(payload):
   return jwt
 
 def verify_and_decode_jwt(jwt):
-  global timeStarted
   global secret_key
-
-  if (timeStarted + datetime.timedelta(hours=4)).timestamp() < datetime.datetime.now().timestamp():
-    secret_key = os.environ['SECRET_KEY']
-    timeStarted = datetime.datetime.now()
 
   b64_header, b64_payload, b64_signature = jwt.split('.')
   b64_signature_checker = base64.urlsafe_b64encode(
@@ -58,7 +47,7 @@ def verify_and_decode_jwt(jwt):
 
   # payload extraido antes para checar o campo 'exp'
   payload = json.loads(base64.urlsafe_b64decode(b64_payload))
-  unix_time_now = datetime.datetime.now().timestamp()
+  unix_time_now = datetime.datetime.utcnow().timestamp()
 
   if payload.get('exp') and payload['exp'] < unix_time_now:
     return ('Token expirado')
@@ -69,13 +58,7 @@ def verify_and_decode_jwt(jwt):
   return payload    
 
 def authentication(jwt):
-  global timeStarted
   global secret_key
-
-  if (timeStarted + datetime.timedelta(hours=4)).timestamp() < datetime.datetime.now().timestamp():
-    #secret_key = token_hex(16)
-    secret_key = os.environ['SECRET_KEY']
-    timeStarted = datetime.datetime.now()
 
   try:
     b64_header, b64_payload, b64_signature = jwt.split('.')
@@ -89,7 +72,7 @@ def authentication(jwt):
 
     # payload extraido antes para checar o campo 'exp'
     payload = json.loads(base64.urlsafe_b64decode(b64_payload))
-    unix_time_now = datetime.datetime.now().timestamp()
+    unix_time_now = datetime.datetime.utcnow().timestamp()
 
     if payload.get('exp') and payload['exp'] < unix_time_now:
       return False
@@ -105,7 +88,7 @@ def authentication(jwt):
 if __name__ == '__main__':
   payload = {
       'userId': '55395427-265a-4166-ac93-da6879edb57a',
-      'exp': (datetime.datetime.now() + datetime.timedelta(hours=2)).timestamp(),
+      'exp': (datetime.datetime.utcnow() + datetime.timedelta(hours=2)).timestamp(),
   }
   jwt_created = create_jwt(payload)
   decoded_jwt = verify_and_decode_jwt(jwt_created)

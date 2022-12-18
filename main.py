@@ -1,6 +1,6 @@
 from email.mime import base
 from pickle import PUT
-from fastapi import FastAPI, Response, status, Header, Depends
+from fastapi import FastAPI, Response, status, Header, Depends, Cookie
 import bases_models
 import login_class
 from fastapi.middleware.cors import CORSMiddleware
@@ -9,13 +9,14 @@ import auth_layer.jwt_class as auth_class
 from service_layer.params_formater import Params_formater as Params
 from service_layer.sla_month_extractor import Sla_month_extrator as Extractor
 from typing import Union
-import random
+import datetime
 import os
 from auth_layer.auth_bearer import JWTBearer
 
 app = FastAPI()
 
-origins = ["*"]
+#origins = ["*"]
+origins = ["http://localhost:8080", "http://10.61.246.14:8080"]
 
 app.add_middleware(
   CORSMiddleware,
@@ -36,7 +37,12 @@ async def create_login(login: bases_models.Login, response: Response ):
   response_login = login_class.login_auth(login_dict=login_dict)
   if  response_login[0] != 200:
     response.status_code = status.HTTP_401_UNAUTHORIZED
-  return  [{"redmine_status_response": response_login[0]}, response_login[1]]
+  else:
+    token = auth_class.verify_and_decode_jwt(response_login[1]) 
+    token_expires_time_stamp = token["exp"]
+    token_expires = datetime.datetime.fromtimestamp(token_expires_time_stamp)
+    response.set_cookie(key="Authorization",value=f"Bearer {response_login[1]}", httponly=True , expires=token_expires.strftime("%a, %d %b %Y %H:%M:%S GMT"), samesite="none", secure=True)
+  return  [{"redmine_status_response": response_login[0]}]
 
 #create configurações
 @app.post("/configuracoes/usuariosFabrica/", status_code=201, dependencies=[Depends(JWTBearer())])
@@ -123,7 +129,7 @@ async def read_paginas_de_dados_by_id(response: Response, Authorization: Union [
 
 #read all
 @app.get("/configuracoes/usuariosFabrica/", status_code=200, dependencies=[Depends(JWTBearer())])
-async def read_usuarios_fabrica_all(response: Response ):
+async def read_usuarios_fabrica_all(response: Response):
   response_crud = crud_class.read_usuarios_fabrica_BD_all()
   if response_crud[0] != 200:
     response.status_code = status.HTTP_404_NOT_FOUND
