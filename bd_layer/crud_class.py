@@ -109,7 +109,7 @@ def read_usuarios_fabrica_BD_all():
     list_docs.sort(key=utils.sort_dict_logins)
     list_docs_sorted = list_docs
     return (200, list_docs_sorted)
-  return (404, {})
+  return (404, [])
 
 def read_feriados_e_datas_DB_all():
   docs = db.collection("feriados_e_datas").get()
