@@ -131,16 +131,22 @@ async def read_paginas_de_dados_by_id(response: Response, Authorization: Union [
 @app.get("/configuracoes/usuariosFabrica/", status_code=200, dependencies=[Depends(JWTBearer())])
 async def read_usuarios_fabrica_all(response: Response):
   response_crud = crud_class.read_usuarios_fabrica_BD_all()
+  if response_crud[0] != 200:
+    response.status_code = status.HTTP_404_NOT_FOUND
   return [{"redmine_status_response": response_crud[0]}, response_crud[1]] 
 
 @app.get("/configuracoes/feriadosEDatas/", status_code=200, dependencies=[Depends(JWTBearer())])
 async def read_feriados_e_datas_all(response: Response ):
   response_crud = crud_class.read_feriados_e_datas_DB_all()
+  if response_crud[0] != 200:
+    response.status_code = status.HTTP_404_NOT_FOUND
   return [{"redmine_status_response": response_crud[0]}, response_crud[1]] 
 
 @app.get("/configuracoes/paginasDeDados/", status_code=200, dependencies=[Depends(JWTBearer())])
 async def read_paginas_de_dados_all(response: Response ):
   response_crud = crud_class.read_paginas_de_dados_BD_all()
+  if response_crud[0] != 200:
+    response.status_code = status.HTTP_404_NOT_FOUND
   return [{"redmine_status_response": response_crud[0]}, response_crud[1]] 
 
 @app.get("/configuracoes/allRedmineUsers/", status_code=200, dependencies=[Depends(JWTBearer())])
@@ -149,6 +155,8 @@ async def read_all_readmine_users(response: Response , Authorization: Union [str
   token = token_list[1]
   try:
     response_crud = crud_class.read_all_users_readmine(jwt=token)
+    if response_crud[0] != 200:
+      response.status_code = status.HTTP_404_NOT_FOUND
     return [{"redmine_status_response": response_crud[0]}, response_crud[1]] 
   except:
     raise HTTPException(status_code=401, detail="Redmine Authentication problem")
