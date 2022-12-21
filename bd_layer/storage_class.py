@@ -3,13 +3,14 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 from firebase_admin import storage
 import os
+import json
 
 import csv
 
 dirname = os.path.dirname(__file__)
 filename = os.path.join(dirname,"service_key.json" )
 
-cred = credentials.Certificate(filename)
+cred = credentials.Certificate(json.loads(os.environ['SERVICE_KEY']))
 #firebase_admin.initialize_app(cred, {"storageBucket": "redmine-bd.appspot.com/" })
 
 db=firestore.client()
