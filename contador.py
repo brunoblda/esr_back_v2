@@ -23,8 +23,8 @@ def request_module(url, auth_p):
         quit()
 
 def counting_users(auth_p):
-    url_base_users = 'https://redmine.iphan.gov.br/redmine/users.json?status=' 
-    url_base_groups = 'https://redmine.iphan.gov.br/redmine/groups.json?status=' 
+    url_base_users = 'https://redmine.iphan.gov.br/users.json?status=' 
+    url_base_groups = 'https://redmine.iphan.gov.br/groups.json?status=' 
     dicio_decoding_users = request_module(url_base_users, auth_p)
 
     total_users = dicio_decoding_users['total_count']
@@ -67,7 +67,7 @@ def counting_users(auth_p):
     return dict_users_id_login_name
 
 def list_of_priorities(auth_p):
-    url_base_priorities = 'https://redmine.iphan.gov.br/redmine/enumerations/issue_priorities.json' 
+    url_base_priorities = 'https://redmine.iphan.gov.br/enumerations/issue_priorities.json' 
     dicio_decoding_priorities = request_module(url_base_priorities, auth_p)
     priorities_list = dicio_decoding_priorities['issue_priorities']
 
@@ -657,7 +657,7 @@ def get_data_resolvida(lista_de_journals):
     return data_resolvido_date
 
 def execute(tarefa, feriados, auth_params, usuarios_da_fabrica):
-    url_base = 'https://redmine.iphan.gov.br/redmine'
+    url_base = 'https://redmine.iphan.gov.br'
     projects = '/projects.xml'
     issues = '/issues.xml'
     issue = '/issues/{}.json'.format(str(tarefa))

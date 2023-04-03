@@ -23,7 +23,7 @@ class Sla_month_extrator():
     # percorre por 10 paginas com 50 issues cada
     percorre_quantas_paginas = self.paginas
 
-    url_login = 'https://redmine.iphan.gov.br/redmine/issues.json' 
+    url_login = 'https://redmine.iphan.gov.br/issues.json' 
 
     auth_user = self.user_login
 
@@ -33,7 +33,7 @@ class Sla_month_extrator():
 
     dias_feriados = self.feriados
 
-    url_base = 'https://redmine.iphan.gov.br/redmine'
+    url_base = 'https://redmine.iphan.gov.br'
     projects = '/projects.json'
     issues = '/issues.json'
     issue7400 = "/issues/7400.json"

@@ -206,7 +206,7 @@ async def extract_Month_Sla(extract_body: bases_models.Extract_body, response: R
    
 
 @app.get("/extratorSlaMensal/pegarDados", status_code=200, dependencies=[Depends(JWTBearer())])
-async def extract_Month_Sla(extract_body: bases_models.Extract_body, response: Response, Authorization: Union [str, None] = Header(default=None)):
+async def extract_Month_Sla_pegar_dados(extract_body: bases_models.Extract_body, response: Response, Authorization: Union [str, None] = Header(default=None)):
   token_list = Authorization.split(" ")
   token = token_list[1]
 
