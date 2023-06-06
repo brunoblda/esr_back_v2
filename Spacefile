@@ -1,0 +1,14 @@
+# Spacefile Docs: https://go.deta.dev/docs/spacefile/v0
+v: 0
+micros:
+  - name: esr-back
+    src: ./
+    engine: python3.9
+    primary: true
+    presets:
+      env:
+        - name: SECRET_KEY
+          description: Secret key used to generate de jwt
+        - name: SERVICE_KEY
+          description: Service key used to connect to firebase
+
