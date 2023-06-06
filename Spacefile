@@ -4,6 +4,8 @@ micros:
   - name: esr-back
     src: ./
     engine: python3.9
+    public_routes:
+      - "/*"
     primary: true
     presets:
       env:
