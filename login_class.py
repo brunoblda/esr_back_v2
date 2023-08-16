@@ -3,7 +3,7 @@ import auth_layer.jwt_class as jwt_class
 
 def login_auth(login_dict):
 
-  url_login = 'https://redmine.iphan.gov.br/issues.json' 
+  url_login = 'https://redmine.iphan.gov.br/redmine/issues.json' 
 
   if not login_dict.get("jwt_token"):
 
